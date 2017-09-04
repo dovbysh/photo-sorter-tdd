@@ -1,0 +1,20 @@
+{
+  "name": "dovbysh/photo_sorter_tdd",
+  "description": "Copy media files (basicaly your photo and video) from one location to another with creation folders by date of your files",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Dovbyshko Andrey",
+      "email": "dovbysh@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "dovbysh\\PhotoSorterTdd\\": "src",
+      "dovbysh\\PhotoSorterTest\\": "test"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.3.*"
+  }
+}

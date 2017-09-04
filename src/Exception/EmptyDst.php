@@ -4,7 +4,7 @@ namespace dovbysh\PhotoSorterTdd\Exception;
 
 use Throwable;
 
-class EmptyDstException extends UnconfiguredException
+class EmptyDst extends Unconfigured
 {
     const NAME = 'dstPath';
 

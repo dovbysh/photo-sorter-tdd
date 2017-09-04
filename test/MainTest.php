@@ -2,8 +2,8 @@
 
 namespace dovbysh\PhotoSorterTest;
 
-use dovbysh\PhotoSorterTdd\Exception\EmptyDstException;
-use dovbysh\PhotoSorterTdd\Exception\EmptySrcException;
+use dovbysh\PhotoSorterTdd\Exception\EmptyDst;
+use dovbysh\PhotoSorterTdd\Exception\EmptySrc;
 use dovbysh\PhotoSorterTdd\Factory;
 use dovbysh\PhotoSorterTdd\Main;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +14,7 @@ class MainTest extends TestCase
     {
         $main = new Main('', '');
 
-        $this->expectException(EmptySrcException::class);
+        $this->expectException(EmptySrc::class);
 
         $main->run();
     }
@@ -23,7 +23,7 @@ class MainTest extends TestCase
     {
         $main = new Main('/tmp', '');
 
-        $this->expectException(EmptyDstException::class);
+        $this->expectException(EmptyDst::class);
 
         $main->run();
     }

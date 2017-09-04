@@ -2,7 +2,7 @@
 
 namespace dovbysh\PhotoSorterTdd\Exception;
 
-class UnconfiguredException extends \Exception
+class Unconfigured extends \Exception
 {
     public $parametrName = '';
 }

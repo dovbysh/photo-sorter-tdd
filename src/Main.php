@@ -2,8 +2,8 @@
 
 namespace dovbysh\PhotoSorterTdd;
 
-use dovbysh\PhotoSorterTdd\Exception\EmptyDstException;
-use dovbysh\PhotoSorterTdd\Exception\EmptySrcException;
+use dovbysh\PhotoSorterTdd\Exception\EmptyDst;
+use dovbysh\PhotoSorterTdd\Exception\EmptySrc;
 
 class Main
 {
@@ -47,16 +47,16 @@ class Main
     }
 
     /**
-     * @throws EmptyDstException
-     * @throws EmptySrcException
+     * @throws EmptyDst
+     * @throws EmptySrc
      */
     private function checkConfigured()
     {
         if (empty($this->srcPath)) {
-            throw new EmptySrcException('Empty srcPath');
+            throw new EmptySrc('Empty srcPath');
         }
         if (empty($this->dstPath)) {
-            throw new EmptyDstException('Empty dstPath');
+            throw new EmptyDst('Empty dstPath');
         }
     }
 }

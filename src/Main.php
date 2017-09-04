@@ -2,12 +2,27 @@
 
 namespace dovbysh\PhotoSorterTdd;
 
+use dovbysh\PhotoSorterTdd\Exception\EmptyDstException;
+use dovbysh\PhotoSorterTdd\Exception\EmptySrcException;
 
 class Main
 {
 
     private $srcPath = '';
     private $dstPath = '';
+
+    /**
+     * @var Factory
+     */
+    private $factory;
+
+    /**
+     * @param Factory $factory
+     */
+    public function setFactory(Factory $factory)
+    {
+        $this->factory = $factory;
+    }
 
     /**
      * Main constructor.
@@ -22,11 +37,26 @@ class Main
 
     public function run()
     {
+        $this->checkConfigured();
         $srcDirectoryIterator = $this->getSrcIterator();
     }
 
-    protected function getSrcIterator(): \RecursiveDirectoryIterator
+    protected function getSrcIterator(): \RecursiveIterator
     {
-        return new \DirectoryIterator($this->srcPath);
+        return $this->factory->getSrcIterator($this->srcPath);
+    }
+
+    /**
+     * @throws EmptyDstException
+     * @throws EmptySrcException
+     */
+    private function checkConfigured()
+    {
+        if (empty($this->srcPath)) {
+            throw new EmptySrcException('Empty srcPath');
+        }
+        if (empty($this->dstPath)) {
+            throw new EmptyDstException('Empty dstPath');
+        }
     }
 }

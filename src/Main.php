@@ -41,7 +41,7 @@ class Main
         $srcDirectoryIterator = $this->getSrcIterator();
     }
 
-    protected function getSrcIterator(): \RecursiveIterator
+    protected function getSrcIterator(): \OuterIterator
     {
         return $this->factory->getSrcIterator($this->srcPath);
     }

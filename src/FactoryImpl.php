@@ -5,8 +5,8 @@ namespace dovbysh\PhotoSorterTdd;
 
 class FactoryImpl implements Factory
 {
-    public function getSrcIterator(string $path): \RecursiveIterator
+    public function getSrcIterator(string $path): \OuterIterator
     {
-        return new \RecursiveDirectoryIterator($path);
+        return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
     }
 }

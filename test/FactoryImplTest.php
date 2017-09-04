@@ -7,21 +7,52 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryImplTest extends TestCase
 {
+    /**
+     * @var FactoryImpl
+     */
+    private $factoryImpl;
+
+    /**
+     * @var TestDirectoryCreator
+     */
+    private $directory;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->factoryImpl = new FactoryImpl();
+    }
+
+
     public function testGetSrcIterator_returns_InstanceOfRecursiveIterator()
     {
-        $f = new FactoryImpl();
+        $iterator = $this->factoryImpl->getSrcIterator('/tmp');
 
-        $iterator = $f->getSrcIterator('/tmp');
-
-        $this->assertInstanceOf(\RecursiveIterator::class, $iterator);
+        $this->assertInstanceOf(\OuterIterator::class, $iterator);
     }
 
     public function testGetSrcIterator_UnexpectedValueException()
     {
-        $f = new FactoryImpl();
-
         $this->expectException(\UnexpectedValueException::class);
 
-        $f->getSrcIterator('/path_not_found');
+        $this->factoryImpl->getSrcIterator('/path_not_found');
+    }
+
+    public function testSrcIterator_iterateSomthing()
+    {
+        $this->directory = new TestDirectoryCreator();
+        $iterator = $this->factoryImpl->getSrcIterator($this->directory->getSourceDir());
+
+        $files = [];
+        foreach ($iterator as $fileName) {
+            if (is_file($fileName)){
+                $files[] = (string) $fileName;
+            }
+        }
+        $expectedFiles = $this->directory->getSourceFiles();
+        sort($files);
+        sort($expectedFiles);
+
+        $this->assertEquals($expectedFiles, $files);
     }
 }

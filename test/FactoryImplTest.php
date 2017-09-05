@@ -49,7 +49,7 @@ class FactoryImplTest extends TestCase
                 $files[] = (string) $fileName;
             }
         }
-        $expectedFiles = $this->directory->getSourceFiles();
+        $expectedFiles = $this->directory->getSourceJpegFiles();
         sort($files);
         sort($expectedFiles);
 

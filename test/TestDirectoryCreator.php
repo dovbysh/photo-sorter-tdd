@@ -13,12 +13,24 @@ class TestDirectoryCreator
     private $now = 0;
     private $jpegSpecificDate = 0;
 
-    private $sourceFiles = [];
+    private $sourceJpegFiles = [];
     private $jpegWithoutDateTimeTag = '';
     private $jpegWithoutDateTimeOriginalTag = '';
+    private $dataDir = '';
+    private $sourceVideoFiles = [];
+
+    /**
+     * @return array
+     */
+    public function getSourceVideoFiles(): array
+    {
+        return $this->sourceVideoFiles;
+    }
 
     public function __construct(bool $selfInitialize = true)
     {
+        $this->dataDir = __DIR__ . '/data/';
+
         if ($selfInitialize) {
             $this->setUp();
         }
@@ -46,19 +58,28 @@ class TestDirectoryCreator
         imagefill($im, 0, 0, 255);
         imagejpeg($im, $this->jpegFileWithNowDate);
         $dt = date('Y:m:d H:i:s', $this->now);
-        $dataDir = __DIR__ . '/data/';
-        `{$this->exiftool} -tagsfromfile {$dataDir}a.jpg -exif {$this->jpegFileWithNowDate}`;
+        `{$this->exiftool} -tagsfromfile {$this->dataDir}a.jpg -exif {$this->jpegFileWithNowDate}`;
         `{$this->exiftool} -alldates="$dt" {$this->jpegFileWithNowDate}`;
         `rm -f {$this->jpegFileWithNowDate}_original`;
 
-        $this->sourceFiles[] = $this->jpegFileWithNowDate;
+        $this->sourceJpegFiles[] = $this->jpegFileWithNowDate;
 
         copy($this->jpegFileWithNowDate, $this->jpegFileWithSpecificDate);
         $dt = date('Y:m:d H:i:s', $this->jpegSpecificDate);
         `{$this->exiftool} -alldates="$dt" {$this->jpegFileWithSpecificDate}`;
         `rm -f {$this->jpegFileWithSpecificDate}_original`;
 
-        $this->sourceFiles[] = $this->jpegFileWithSpecificDate;
+        $this->sourceJpegFiles[] = $this->jpegFileWithSpecificDate;
+    }
+
+    public function setUpVideo()
+    {
+        copy($this->dataDir . "/v.mp4", $this->sourceDir . '/v.mp4');
+        //copy($this->dataDir . "/v2.thm", $this->sourceDir . '/v2.thm');//jpeg
+        $this->sourceVideoFiles = [
+            $this->sourceDir . '/v.mp4',
+        //    $this->sourceDir . '/v2.thm'//jpeg
+        ];
     }
 
     /**
@@ -133,8 +154,8 @@ class TestDirectoryCreator
     /**
      * @return array
      */
-    public function getSourceFiles(): array
+    public function getSourceJpegFiles(): array
     {
-        return $this->sourceFiles;
+        return $this->sourceJpegFiles;
     }
 }

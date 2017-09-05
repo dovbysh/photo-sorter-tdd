@@ -8,12 +8,14 @@ class TestDirectoryCreator
     private $sourceDir = '';
     private $destinationDir = '';
     private $exiftool = '/usr/bin/exiftool';
-    private $sA = '';
-    private $sDate1 = '';
+    private $jpegFileWithNowDate = '';
+    private $jpegFileWithSpecificDate = '';
     private $now = 0;
-    private $date1 = 0;
+    private $jpegSpecificDate = 0;
 
     private $sourceFiles = [];
+    private $jpegWithoutDateTimeTag = '';
+    private $jpegWithoutDateTimeOriginalTag = '';
 
     public function __construct(bool $selfInitialize = true)
     {
@@ -34,29 +36,80 @@ class TestDirectoryCreator
         mkdir($this->destinationDir, 0777, true);
 
         $this->now = time();
-        $this->date1 = mktime(mt_rand(0, 24), mt_rand(0, 60), mt_rand(0, 60), mt_rand(1, 12), mt_rand(0, 32), mt_rand(2000, 2017));
-        $this->sDate1 = $this->sourceDir . '/' . mt_rand() . '/' . mt_rand() . '/' . mt_rand();
-        mkdir($this->sDate1, 0777, true);
-        $this->sDate1 .= mt_rand() . '.jpg';
+        $this->jpegSpecificDate = mktime(mt_rand(0, 24), mt_rand(0, 60), mt_rand(0, 60), mt_rand(1, 12), mt_rand(0, 32), mt_rand(2000, 2016));
+        $this->jpegFileWithSpecificDate = $this->sourceDir . '/' . mt_rand() . '/' . mt_rand() . '/' . mt_rand();
+        mkdir($this->jpegFileWithSpecificDate, 0777, true);
+        $this->jpegFileWithSpecificDate .= mt_rand() . '.jpg';
 
-        $this->sA = $this->sourceDir . '/a.jpg';
+        $this->jpegFileWithNowDate = $this->sourceDir . '/a.jpg';
         $im = imagecreatetruecolor(20, 20);
         imagefill($im, 0, 0, 255);
-        imagejpeg($im, $this->sA);
+        imagejpeg($im, $this->jpegFileWithNowDate);
         $dt = date('Y:m:d H:i:s', $this->now);
         $dataDir = __DIR__ . '/data/';
-        `{$this->exiftool} -tagsfromfile {$dataDir}a.jpg -exif {$this->sA}`;
-        `{$this->exiftool} -alldates="$dt" {$this->sA}`;
-        `rm -f {$this->sA}_original`;
+        `{$this->exiftool} -tagsfromfile {$dataDir}a.jpg -exif {$this->jpegFileWithNowDate}`;
+        `{$this->exiftool} -alldates="$dt" {$this->jpegFileWithNowDate}`;
+        `rm -f {$this->jpegFileWithNowDate}_original`;
 
-        $this->sourceFiles[] = $this->sA;
+        $this->sourceFiles[] = $this->jpegFileWithNowDate;
 
-        copy($this->sA, $this->sDate1);
-        $dt = date('Y:m:d H:i:s', $this->date1);
-        `{$this->exiftool} -alldates="$dt" {$this->sDate1}`;
-        `rm -f {$this->sDate1}_original`;
+        copy($this->jpegFileWithNowDate, $this->jpegFileWithSpecificDate);
+        $dt = date('Y:m:d H:i:s', $this->jpegSpecificDate);
+        `{$this->exiftool} -alldates="$dt" {$this->jpegFileWithSpecificDate}`;
+        `rm -f {$this->jpegFileWithSpecificDate}_original`;
 
-        $this->sourceFiles[] = $this->sDate1;
+        $this->sourceFiles[] = $this->jpegFileWithSpecificDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getJpegSpecificDate(): \DateTime
+    {
+        $dt = new \DateTime();
+        $dt->setTimestamp($this->jpegSpecificDate);
+        return $dt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJpegWithoutDateTimeTag(): string
+    {
+        return $this->jpegWithoutDateTimeTag;
+    }
+
+    public function createJpegWithoutDateTimeTag()
+    {
+        $this->jpegWithoutDateTimeTag = dirname($this->getJpegFileWithSpecificDate()) . '/a_WithoutDateTimeTag.jpg';
+        copy($this->getJpegFileWithSpecificDate(), $this->jpegWithoutDateTimeTag);
+        `{$this->exiftool} -ModifyDate='' {$this->jpegWithoutDateTimeTag}`;
+        `rm -f {$this->jpegWithoutDateTimeTag}_original`;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJpegFileWithSpecificDate(): string
+    {
+        return $this->jpegFileWithSpecificDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJpegWithoutDateTimeOriginalTag(): string
+    {
+        return $this->jpegWithoutDateTimeOriginalTag;
+    }
+
+    public function createJpegWithout_DateTime_and_DateTimeOriginal_Tag()
+    {
+        $this->jpegWithoutDateTimeOriginalTag = dirname($this->getJpegFileWithSpecificDate()) . '/a_WithoutOriginalTag.jpg';
+        copy($this->getJpegFileWithSpecificDate(), $this->jpegWithoutDateTimeOriginalTag);
+        `{$this->exiftool} -ModifyDate='' {$this->jpegWithoutDateTimeOriginalTag}`;
+        `{$this->exiftool} -DateTimeOriginal='' {$this->jpegWithoutDateTimeOriginalTag}`;
+        `rm -f {$this->jpegWithoutDateTimeOriginalTag}_original`;
     }
 
     /**

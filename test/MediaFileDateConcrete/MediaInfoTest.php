@@ -5,13 +5,13 @@ namespace dovbysh\PhotoSorterTest\MediaFileDateConcrete;
 use dovbysh\PhotoSorterTdd\Exception\UnableToDetermineFileDate;
 use dovbysh\PhotoSorterTdd\MediaFileDateConcrete\MediaInfo;
 use dovbysh\PhotoSorterTest\FileInfo;
-use dovbysh\PhotoSorterTest\TestDirectoryCreator;
+use dovbysh\PhotoSorterTest\Helpers\TestFiles;
 use PHPUnit\Framework\TestCase;
 
 class MediaInfoTest extends TestCase
 {
     /**
-     * @var TestDirectoryCreator
+     * @var \dovbysh\PhotoSorterTest\Helpers\TestFiles
      */
     private static $testFiles;
 
@@ -29,7 +29,7 @@ class MediaInfoTest extends TestCase
     public static function initTestFilesIfNecessary()
     {
         if (is_null(self::$testFiles)) {
-            self::$testFiles = new TestDirectoryCreator();
+            self::$testFiles = new TestFiles();
             self::$testFiles->setUpVideo();
         }
     }

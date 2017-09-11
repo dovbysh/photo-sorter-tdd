@@ -3,6 +3,7 @@
 namespace dovbysh\PhotoSorterTest;
 
 use dovbysh\PhotoSorterTdd\FactoryImpl;
+use dovbysh\PhotoSorterTest\Helpers\TestFiles;
 use PHPUnit\Framework\TestCase;
 
 class FactoryImplTest extends TestCase
@@ -13,9 +14,9 @@ class FactoryImplTest extends TestCase
     private $factoryImpl;
 
     /**
-     * @var TestDirectoryCreator
+     * @var TestFiles
      */
-    private $directory;
+    private $testFiles;
 
     protected function setUp()
     {
@@ -40,8 +41,8 @@ class FactoryImplTest extends TestCase
 
     public function testSrcIterator_iterateSomthing()
     {
-        $this->directory = new TestDirectoryCreator();
-        $iterator = $this->factoryImpl->getSrcIterator($this->directory->getSourceDir());
+        $this->testFiles = new TestFiles();
+        $iterator = $this->factoryImpl->getSrcIterator($this->testFiles->getSourceDir());
 
         $files = [];
         foreach ($iterator as $fileName) {
@@ -49,7 +50,7 @@ class FactoryImplTest extends TestCase
                 $files[] = (string) $fileName;
             }
         }
-        $expectedFiles = $this->directory->getSourceJpegFiles();
+        $expectedFiles = $this->testFiles->getSourceJpegFiles();
         sort($files);
         sort($expectedFiles);
 

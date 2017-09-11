@@ -4,13 +4,13 @@ namespace dovbysh\PhotoSorterTest\MediaFileDateConcrete;
 
 use dovbysh\PhotoSorterTdd\Exception\UnableToDetermineFileDate;
 use dovbysh\PhotoSorterTdd\MediaFileDateConcrete\Exif;
-use dovbysh\PhotoSorterTest\TestDirectoryCreator;
+use dovbysh\PhotoSorterTest\Helpers\TestFiles;
 use PHPUnit\Framework\TestCase;
 
 class ExifTest extends TestCase
 {
     /**
-     * @var TestDirectoryCreator
+     * @var \dovbysh\PhotoSorterTest\Helpers\TestFiles
      */
     private static $testFiles;
 
@@ -22,7 +22,7 @@ class ExifTest extends TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        self::$testFiles = new TestDirectoryCreator();
+        self::$testFiles = new TestFiles();
     }
 
     public function testJpegFileWithSpecificDate()

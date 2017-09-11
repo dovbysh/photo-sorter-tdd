@@ -1,8 +1,10 @@
 <?php
 
-namespace dovbysh\PhotoSorterTest;
+namespace dovbysh\PhotoSorterTest\Helpers;
 
-class TestDirectoryCreator
+use dovbysh\PhotoSorterTest\FileInfo;
+
+class TestFiles
 {
     private $rootPath;
     private $sourceDir = '';
@@ -26,7 +28,7 @@ class TestDirectoryCreator
 
     public function __construct(bool $selfInitialize = true)
     {
-        $this->dataDir = __DIR__ . '/data/';
+        $this->dataDir = __DIR__ . '/../data/';
 
         if ($selfInitialize) {
             $this->setUp();

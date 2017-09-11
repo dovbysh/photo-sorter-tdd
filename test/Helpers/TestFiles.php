@@ -14,7 +14,6 @@ class TestFiles
     private $jpegFileWithSpecificDate = '';
     private $now = 0;
     private $jpegSpecificDate = 0;
-
     private $sourceJpegFiles = [];
     private $jpegWithoutDateTimeTag = '';
     private $jpegWithoutDateTimeOriginalTag = '';
@@ -73,6 +72,14 @@ class TestFiles
         copy($this->dataDir . "/v.thm", $this->sourceDir . '/v.thm');//jpeg
         $this->sourceJpegFiles[] = $this->thmFile = $this->sourceDir . '/v.thm';
         $this->thmFileDateTime = new \DateTime('2017-09-05 15:32:35');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDestinationDir(): string
+    {
+        return $this->destinationDir;
     }
 
     /**

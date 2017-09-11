@@ -18,14 +18,11 @@ class TestDirectoryCreator
     private $jpegWithoutDateTimeOriginalTag = '';
     private $dataDir = '';
     private $sourceVideoFiles = [];
-
+    private $thmFile = '';
     /**
-     * @return array
+     * @var \DateTime
      */
-    public function getSourceVideoFiles(): array
-    {
-        return $this->sourceVideoFiles;
-    }
+    private $thmFileDateTime;
 
     public function __construct(bool $selfInitialize = true)
     {
@@ -70,15 +67,44 @@ class TestDirectoryCreator
         `rm -f {$this->jpegFileWithSpecificDate}_original`;
 
         $this->sourceJpegFiles[] = $this->jpegFileWithSpecificDate;
+
+        copy($this->dataDir . "/v.thm", $this->sourceDir . '/v.thm');//jpeg
+        $this->sourceJpegFiles[] = $this->thmFile = $this->sourceDir . '/v.thm';
+        $this->thmFileDateTime = new \DateTime('2017-09-05 15:32:35');
+    }
+
+    /**
+     * @return string
+     */
+    public function getThmFile(): string
+    {
+        return $this->thmFile;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getThmFileDateTime(): \DateTime
+    {
+        return $this->thmFileDateTime;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSourceVideoFiles(): array
+    {
+        return $this->sourceVideoFiles;
     }
 
     public function setUpVideo()
     {
         copy($this->dataDir . "/v.mp4", $this->sourceDir . '/v.mp4');
-        //copy($this->dataDir . "/v2.thm", $this->sourceDir . '/v2.thm');//jpeg
+        copy($this->dataDir . "/v2.mp4", $this->sourceDir . '/v2.mp4');
+
         $this->sourceVideoFiles = [
-            $this->sourceDir . '/v.mp4',
-        //    $this->sourceDir . '/v2.thm'//jpeg
+            new FileInfo($this->sourceDir . '/v.mp4', new \DateTime('2017-09-05 15:32:38')),
+            new FileInfo($this->sourceDir . '/v2.mp4', new \DateTime('2017-09-08 16:01:12'))
         ];
     }
 

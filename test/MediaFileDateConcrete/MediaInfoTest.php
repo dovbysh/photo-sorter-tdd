@@ -4,6 +4,7 @@ namespace dovbysh\PhotoSorterTest\MediaFileDateConcrete;
 
 use dovbysh\PhotoSorterTdd\Exception\UnableToDetermineFileDate;
 use dovbysh\PhotoSorterTdd\MediaFileDateConcrete\MediaInfo;
+use dovbysh\PhotoSorterTest\FileInfo;
 use dovbysh\PhotoSorterTest\TestDirectoryCreator;
 use PHPUnit\Framework\TestCase;
 
@@ -61,8 +62,9 @@ class MediaInfoTest extends TestCase
         self::initTestFilesIfNecessary();
         $videoFiles = self::$testFiles->getSourceVideoFiles();
         $data = [];
+        /** @var FileInfo $videoFile */
         foreach ($videoFiles as $videoFile) {
-            $data[] = [$videoFile, new \DateTime('2017-09-05 15:32:38')];
+            $data[] = $videoFile->toArray();
         }
         return $data;
     }

@@ -58,6 +58,14 @@ class ExifTest extends TestCase
         $this->assertEquals($jpegExpectedDate, $jpegDate);
     }
 
+
+    public function testThmFile()
+    {
+        $actualDate = $this->exif->getDate(self::$testFiles->getThmFile());
+
+        $this->assertEquals(self::$testFiles->getThmFileDateTime(), $actualDate);
+    }
+
     protected function setUp()
     {
         parent::setUp();

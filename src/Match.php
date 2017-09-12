@@ -3,11 +3,13 @@
 namespace dovbysh\PhotoSorterTdd;
 
 use dovbysh\PhotoSorterTdd\Exception\InvalidRegExp;
+use dovbysh\PhotoSorterTdd\Exception\NotFound;
 
 class Match
 {
     private $regExp;
-    private $matched;
+    private $matched = [];
+    private $notFound = true;
 
     /**
      * @param mixed $regExp
@@ -31,10 +33,14 @@ class Match
     }
 
     /**
-     * @return mixed
+     * @return array
+     * @throws NotFound
      */
     public function getMatched()
     {
+        if ($this->notFound) {
+            throw new NotFound();
+        }
         return $this->matched;
     }
 
@@ -44,6 +50,7 @@ class Match
      */
     public function match(string $subject): bool
     {
+        $this->notFound = false;
         if (is_string($this->regExp)) {
             return (bool)preg_match($this->regExp, $subject, $this->matched);
         } else {
@@ -53,6 +60,7 @@ class Match
                 }
             }
         }
+        $this->notFound = true;
         return false;
     }
 }

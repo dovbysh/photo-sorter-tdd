@@ -3,6 +3,7 @@
 namespace dovbysh\PhotoSorterTest;
 
 use dovbysh\PhotoSorterTdd\Exception\InvalidRegExp;
+use dovbysh\PhotoSorterTdd\Exception\NotFound;
 use dovbysh\PhotoSorterTdd\Match;
 use PHPUnit\Framework\TestCase;
 
@@ -49,6 +50,16 @@ class MatchTest extends TestCase
         $result = $matcher->match('/tmp/Ttttt/584724398/zzz');
 
         $this->assertFalse($result);
+    }
+
+    public function testMatchNothingFromPatterns_getMatchedCall()
+    {
+        $matcher = new Match(['/^zzz$/', '~(/TIMESHIFT/\d+/)~', '~xxx~']);
+        $matcher->match('/tmp/Ttttt/584724398/zzz');
+
+        $this->expectException(NotFound::class);
+
+        $matcher->getMatched();
     }
 
     public function testMatchTimeShiftFileFromPatterns()

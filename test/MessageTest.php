@@ -51,9 +51,14 @@ class MessageTest extends TestCase
         parent::setUp();
         $this->message = new Message();
     }
+
+    public function testFailedToCopy()
+    {
+        $this->expectOutputString("[FailedToCopy] /zzz.txt -> /t/zzz.txt\n");
+        $this->message->failedToCopy('/zzz.txt', '/t/zzz.txt');
+    }
 //   public function test()
 //    {
-//
 //        $this->expectOutputString("");
 //        $this->message->('/zzz.txt');
 //    }

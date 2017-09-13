@@ -109,7 +109,7 @@ class MainProcess
                         if ($this->file->exists($destinationFile)) {
                             $this->message->successCopied($sourceFilePath, $destinationFile);
                         } else {
-
+                            $this->message->failedToCopy($sourceFilePath, $destinationFile);
                         }
                     }
                 } catch (UnableToDetermineFileDate $e) {

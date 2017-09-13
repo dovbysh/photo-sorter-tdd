@@ -99,7 +99,7 @@ class MainProcessTest extends TestCase
         $this->mainProcess->run();
     }
 
-    public function testGetDateWillReturn_DestinationFileDoseNotExist()
+    public function testSuccessCopied()
     {
         $this->commonSrcIterator();
 
@@ -111,6 +111,47 @@ class MainProcessTest extends TestCase
         $this->mediaDestinationPath->expects($this->once())->method('getPath')->willReturn('/2017-01-01');
         $this->timeShift->expects($this->once())->method('check')->willReturn(false);
         $this->timeShift->expects($this->never())->method('getPartOfPath');
+        $this->file->expects($this->exactly(2))->method('exists')->willReturn(false, true);
+        $this->file->expects($this->never())->method('size');
+        $this->file->expects($this->once())->method('copy');
+        $this->message->expects($this->once())->method('successCopied');
+
+        $this->mainProcess->run();
+    }
+
+    public function testFailedToCopy()
+    {
+        $this->commonSrcIterator();
+
+        $this->skip->expects($this->once())->method('match')->willReturn(false);
+        $this->message->expects($this->never())->method('skipped');
+
+        $this->mediaFileDate->expects($this->once())->method('getDate')->willReturn(new \DateTime('2017-01-01 00:00:00'));
+        $this->message->expects($this->never())->method('unableToDetermineFileDate');
+        $this->mediaDestinationPath->expects($this->once())->method('getPath')->willReturn('/2017-01-01');
+        $this->timeShift->expects($this->once())->method('check')->willReturn(false);
+        $this->timeShift->expects($this->never())->method('getPartOfPath');
+        $this->file->expects($this->exactly(2))->method('exists')->willReturn(false, false);
+        $this->file->expects($this->never())->method('size');
+        $this->file->expects($this->once())->method('copy');
+        $this->message->expects($this->never())->method('successCopied');
+        $this->message->expects($this->once())->method('failedToCopy');
+
+        $this->mainProcess->run();
+    }
+
+    public function testTimeShiftReturn_DestinationFileDoseNotExist()
+    {
+        $this->commonSrcIterator();
+
+        $this->skip->expects($this->once())->method('match')->willReturn(false);
+        $this->message->expects($this->never())->method('skipped');
+
+        $this->mediaFileDate->expects($this->once())->method('getDate')->willReturn(new \DateTime('2017-01-01 00:00:00'));
+        $this->message->expects($this->never())->method('unableToDetermineFileDate');
+        $this->mediaDestinationPath->expects($this->once())->method('getPath')->willReturn('/2017-01-01');
+        $this->timeShift->expects($this->once())->method('check')->willReturn(true);
+        $this->timeShift->expects($this->once())->method('getPartOfPath')->willReturn('/timeshift/123/');
         $this->file->expects($this->exactly(2))->method('exists')->willReturn(false, true);
         $this->file->expects($this->never())->method('size');
         $this->file->expects($this->once())->method('copy');

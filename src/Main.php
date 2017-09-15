@@ -29,21 +29,20 @@ class Main
      * @param string $srcPath
      * @param string $dstPath
      */
-    public function __construct(string $srcPath, string $dstPath)
+    public function __construct(string $srcPath, string $dstPath, Factory $factory = null)
     {
         $this->srcPath = $srcPath;
         $this->dstPath = $dstPath;
+        if ($factory instanceof Factory) {
+            $this->setFactory($factory);
+        }
     }
 
     public function run()
     {
         $this->checkConfigured();
-        $srcDirectoryIterator = $this->getSrcIterator();
-    }
-
-    protected function getSrcIterator(): \OuterIterator
-    {
-        return $this->factory->getSrcIterator($this->srcPath);
+        $mainProcess = $this->factory->getMainProcess($this->srcPath, $this->dstPath);
+        $mainProcess->run();
     }
 
     /**

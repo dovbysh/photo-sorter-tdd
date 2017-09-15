@@ -5,5 +5,5 @@ namespace dovbysh\PhotoSorterTdd;
 
 interface Factory
 {
-    public function getSrcIterator(string $path): \OuterIterator;
+    public function getMainProcess(string $srcPath, string $dstPath): MainProcess;
 }

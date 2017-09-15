@@ -6,6 +6,7 @@ use dovbysh\PhotoSorterTdd\Exception\EmptyDst;
 use dovbysh\PhotoSorterTdd\Exception\EmptySrc;
 use dovbysh\PhotoSorterTdd\Factory;
 use dovbysh\PhotoSorterTdd\Main;
+use dovbysh\PhotoSorterTdd\MainProcess;
 use PHPUnit\Framework\TestCase;
 
 class MainTest extends TestCase
@@ -29,14 +30,29 @@ class MainTest extends TestCase
     }
 
 
-    public function testRunCallGetSrcIterator()
+    public function testRunCallgetMainProcess()
     {
         $main = new Main('/tmp', '/tmp');
-        $factory = $this->getMockBuilder(Factory::class)->setMethods(['getSrcIterator'])->getMockForAbstractClass();
+        $factory = $this->getMockBuilder(Factory::class)->getMockForAbstractClass();
         $main->setFactory($factory);
 
-        $factory->expects($this->once())->method('getSrcIterator')->with($this->equalTo('/tmp'));
+        $mainProcess = $this->getMockBuilder(MainProcess::class)->getMock();
+
+        $factory->expects($this->once())->method('getMainProcess')->willReturn($mainProcess);
+        $mainProcess->expects($this->once())->method('run');
 
         $main->run();
+    }
+
+    public function testConstructor()
+    {
+        $main = $this->getMockBuilder(Main::class)->setMethods(['setFactory'])->disableOriginalConstructor()->getMock();
+        $factory = $this->getMockBuilder(Factory::class)->setMethods(['getSrcIterator'])->getMockForAbstractClass();
+
+        $main->expects($this->once())->method('setFactory')->with($this->equalTo($factory));
+
+        $reflectedClass = new \ReflectionClass(Main::class);
+        $constructor = $reflectedClass->getConstructor();
+        $constructor->invoke($main, '/', '/', $factory);
     }
 }

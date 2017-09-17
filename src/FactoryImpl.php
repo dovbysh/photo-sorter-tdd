@@ -12,12 +12,21 @@ class FactoryImpl implements Factory
 
     public function getMainProcess(string $srcPath, string $dstPath): MainProcess
     {
-        $mainProcess = new MainProcess();
+        $mainProcess = $this->createMainProcess();
         $mainProcess->setSrcIterator($this->getSrcIterator($srcPath));
         $mainProcess->setMediaFileDate($this->getMediaFileDate());
         $mainProcess->setSkip(new Match($this->skipFilter));
+        $mainProcess->setTimeShift(new TimeShift());
+        $mainProcess->setMediaDestinationPath(new MediaDestinationPath($dstPath));
+        $mainProcess->setFile(new File());
+        $mainProcess->setMessage(new Message());
         return $mainProcess;
 
+    }
+
+    protected function createMainProcess(): MainProcess
+    {
+        return new MainProcess();
     }
 
     private function getSrcIterator(string $path): \OuterIterator

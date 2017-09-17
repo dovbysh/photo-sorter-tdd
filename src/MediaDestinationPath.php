@@ -5,19 +5,19 @@ namespace dovbysh\PhotoSorterTdd;
 
 class MediaDestinationPath
 {
-    private $dstDir = '';
+    private $dstPath = '';
 
     /**
      * MediaDestinationPath constructor.
-     * @param string $dstDir
+     * @param string $dstPath
      */
-    public function __construct($dstDir)
+    public function __construct($dstPath)
     {
-        $this->dstDir = rtrim($dstDir, DIRECTORY_SEPARATOR);
+        $this->dstPath = rtrim($dstPath, DIRECTORY_SEPARATOR);
     }
 
     public function getPath(\DateTime $dateTime)
     {
-        return $this->dstDir . '/' . $dateTime->format('Y-m-d');
+        return $this->dstPath . '/' . $dateTime->format('Y-m-d');
     }
 }

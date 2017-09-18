@@ -34,6 +34,13 @@ class MediaInfoTest extends TestCase
         }
     }
 
+    public function testDirectory()
+    {
+        $this->expectException(UnableToDetermineFileDate::class);
+
+        $this->mediaInfo->getDate(dirname(self::$testFiles->getSourceDir()));
+    }
+
     public function testError()
     {
         $this->expectException(UnableToDetermineFileDate::class);
@@ -41,6 +48,14 @@ class MediaInfoTest extends TestCase
         $this->mediaInfo->getDate('file_not_found.txt');
     }
 
+    public function testAvi_Mastered_date()
+    {
+        $data = $this->dataProviderForSampleVideos();
+        $d = array_shift($data);
+        $mi = new MediaInfoStub();
+
+        $this->assertEquals($mi->actualDate, $mi->getDate($d[0]));
+    }
     public function testIfWePassJpegThanError()
     {
         $this->expectException(UnableToDetermineFileDate::class);

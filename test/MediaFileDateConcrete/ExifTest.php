@@ -25,6 +25,13 @@ class ExifTest extends TestCase
         self::$testFiles = new TestFiles();
     }
 
+    public function testDirectory()
+    {
+        $this->expectException(UnableToDetermineFileDate::class);
+
+        $this->exif->getDate(dirname(self::$testFiles->getSourceDir()));
+    }
+
     public function testJpegFileWithSpecificDate()
     {
         $jpegDate = $this->exif->getDate(self::$testFiles->getJpegFileWithSpecificDate());

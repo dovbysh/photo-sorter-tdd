@@ -1,4 +1,4 @@
-.PHONY: all clean install uninstall clean.docker dev test
+.PHONY: all clean install uninstall clean.docker dev test docker.phpunit
 
 all: docker
 
@@ -24,8 +24,17 @@ composer-prod: clean.vendor
 composer-dev:
 	composer install
 
-phar: composer-prod
-	phar-composer build
+docker: docker.phar
+	docker build -t photo_sorter_tdd .
 
-docker: phar
-	docker build -t photo_sorter .
+build.docker:
+	docker build -t photo_sorter_tdd_build build
+
+docker.phar: build.docker clean.vendor
+	docker run -it -v `pwd`:/app photo_sorter_tdd_build /bin/bash -c 'cd /app && composer install --no-dev && php -d phar.readonly=off /usr/bin/phar-composer build && chmod 777 photo_sorter_tdd.phar'
+
+docker.composer-dev: build.docker
+	docker run -it -v `pwd`:/app photo_sorter_tdd_build /bin/bash -c 'cd /app && /usr/bin/composer install && chmod -R g+w,o+w vendor'
+
+docker.phpunit: docker.composer-dev
+	docker run -it -v `pwd`:/app photo_sorter_tdd_build /bin/bash -c 'cd /app && php -dxdebug.coverage_enable=1 /app/vendor/bin/phpunit --configuration /app/phpunit.xml'

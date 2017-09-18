@@ -11,7 +11,7 @@ make
 
 ### Docker
 ```
-docker run -it -v SOURCE_DIRECTORY:/psrc -v DESTINATION_DIR:/pdst --user $UID photo_sorter
+docker run -it -v SOURCE_DIRECTORY:/psrc -v DESTINATION_DIR:/pdst --user $UID photo_sorter_tdd
 ```
 
 ### Ubuntu

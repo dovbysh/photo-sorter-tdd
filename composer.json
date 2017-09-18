@@ -8,6 +8,9 @@
       "email": "dovbysh@gmail.com"
     }
   ],
+  "bin": [
+    "main.php"
+  ],
   "autoload": {
     "psr-4": {
       "dovbysh\\PhotoSorterTdd\\": "src",

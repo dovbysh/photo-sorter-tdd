@@ -1,8 +1,10 @@
-# photo_sorter
+# Photo sorter
+It copies media files and store it in directory structure by date.
+
 ## Installation
 https://github.com/dovbysh/photo-sorter-tdd/releases/download/v0.1/photo_sorter_tdd.phar - compiled all-in-one
 
-##From source:
+### From source:
 
 Clone or download. Install phar-composer https://github.com/clue/phar-composer.
 ```
